@@ -1,3 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(muli LANGUAGES C CXX VERSION 0.1.0)
+
 set(HEADER_FILES
     include/muli/aabb.h
     include/muli/aabb_tree.h
@@ -161,4 +165,9 @@ write_basic_package_version_file(
 install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/muliConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/muli
+)
+
+install(
+    DIRECTORY include/muli
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
