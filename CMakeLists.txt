@@ -166,8 +166,3 @@ install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/muliConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/muli
 )
-
-install(
-    DIRECTORY include/muli
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
