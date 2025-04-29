@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(muli LANGUAGES C CXX VERSION 0.1.0)
 
-set(HEADER_FILES
+set(MULI_HEADERS
     include/muli/aabb.h
     include/muli/aabb_tree.h
     include/muli/broad_phase.h
@@ -64,7 +64,7 @@ set(HEADER_FILES
     include/muli/hash.h
 )
 
-set(SOURCE_FILES
+set(MULI_SOURCES
     src/util/math.cpp
     src/util/stack_allocator.cpp
     src/util/linear_allocator.cpp
@@ -110,59 +110,32 @@ set(SOURCE_FILES
     src/dynamics/constraint/joint/motor_joint.cpp
 )
 
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "src" FILES ${SOURCE_FILES})
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "include" FILES ${HEADER_FILES})
 
-add_library(muli ${SOURCE_FILES} ${HEADER_FILES})
-
-target_precompile_headers(muli
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/muli/common.h
+# --- Library target
+add_library(muli
+    ${MULI_SOURCES}
+    ${MULI_HEADERS}
 )
 
+# --- Public include directories
 target_include_directories(muli
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        $<INSTALL_INTERFACE:include>
 )
 
-set_target_properties(muli PROPERTIES
-    CMAKE_COMPILE_WARNING_AS_ERROR ON
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED YES
-    CXX_EXTENSIONS NO
+# --- C++20
+target_compile_features(muli PUBLIC cxx_std_20)
+
+# --- Precompiled header
+target_precompile_headers(muli
+    PUBLIC
+        include/muli/common.h
 )
 
+# --- Warnings as errors
 if(MSVC)
     target_compile_options(muli PRIVATE /W4 /WX /wd4819)
 else()
     target_compile_options(muli PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
-
-install(
-    TARGETS muli
-    EXPORT muliConfig
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-install(
-    EXPORT muliConfig
-    NAMESPACE muli::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/muli
-)
-
-include(CMakePackageConfigHelpers)
-
-write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/muliConfigVersion.cmake
-    COMPATIBILITY SameMajorVersion
-)
-
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/muliConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/muli
-)
