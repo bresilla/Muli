@@ -1,4 +1,4 @@
-![logo](.github/logo.gif)
+![logo](misc/logo.gif)
 
 # Muli
 
