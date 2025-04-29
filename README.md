@@ -33,11 +33,6 @@
   - Cross platform library (C++20)
   - Intuitive and straightforward API design
 
-### Demo
-  - 50+ interactive Demos
-  - OpenGL based cross platform demo framework
-  - WebAssembly powered web [demo](https://sopiro.github.io/muli-wasm/)
-
 ## Example
 
 ``` c++
@@ -64,31 +59,17 @@ int main()
 }
 ```
 
-## Building and running
-- Install [CMake](https://cmake.org/install/)
-- Ensure CMake is in the system `PATH`
-- Clone the repository `git clone --recursive https://github.com/Sopiro/Muli`
-- Run CMake build script depending on your system
-  - Visual Studio: Run `build.bat`
-  - Otherwise: Run `build.sh`
-- You can find the executable demo in the `build/bin`
-
-## Installation
-
-You can install the library using these commands
-
-``` bat
-mkdir build
-cd build
-cmake -DMULI_BUILD_DEMO=OFF ..
-cmake --build . --config Release
-cmake --install . --prefix "installation-path"
-```
-
-Assuming you've added `"installation-path"` to your system `PATH`, you can now integrate the library into your project
+## CMALE
 
 ``` cmake
-find_package(muli REQUIRED)
+
+include(FetchContent)
+fetchcontent_declare(
+    muli
+    GIT_REPOSITORY https://github.com/bresilla/Muli
+)
+FetchContent_MakeAvailable(muli)
+include_directories(${muli_SOURCE_DIR}/include)
 
 target_link_libraries(your-project PRIVATE muli::muli)
 ```
@@ -100,4 +81,3 @@ Here are some great resources to learn how to build a physics engine!
 - https://box2d.org/publications/
 - https://www.cs.cmu.edu/~baraff/sigcourse/index.html
 - https://dyn4j.org/blog/
-
